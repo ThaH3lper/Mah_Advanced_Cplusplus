@@ -194,7 +194,7 @@ Node<T> * Link<T>::Find(Node<T> * searchFor)
 template<class T>
 const Node<T> * Link<T>::Find(Node<T> * searchFor) const
 {
-	Node<T> * nextInList = Next();
+	const Node<T> * nextInList = Next();
 	while (nextInList != nullptr)
 	{
 		if ((*nextInList->data) == (*searchFor->data))
@@ -217,7 +217,7 @@ template<class T>
 const Node<T>* Link<T>::Find(const T searchFor) const
 {
 	Node<T> * search = new Node<T>(searchFor);
-	Node<T> * found = Find(search);
+	const Node<T> * found = Find(search);
 	delete search;
 	return found;
 }

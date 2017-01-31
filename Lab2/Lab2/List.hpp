@@ -220,7 +220,7 @@ T * Link<T>::Find(T * searchFor)
 template<class T>
 const T * Link<T>::Find(T * searchFor) const
 {
-	T * nextInList = Next();
+	const T * nextInList = Next();
 	while (nextInList != nullptr)
 	{
 		if ((*nextInList->data) == (*searchFor->data))

@@ -205,12 +205,13 @@ T * Link<T>::DeleteBefore()
 	return dynamic_cast<T*>(remove);
 }
 template<class T>
-T * Link<T>::Find(T * searchFor)
+template<class data>
+T * Link<T>::Find(const data & searchFor)
 {
 	T * nextInList = Next();
 	while (nextInList != nullptr)
 	{
-		if ((*nextInList->data) == (*searchFor->data))
+		if ((*nextInList->data) == searchFor)
 			return nextInList;
 		nextInList = nextInList->Next();
 	}
@@ -218,12 +219,13 @@ T * Link<T>::Find(T * searchFor)
 }
 
 template<class T>
-const T * Link<T>::Find(T * searchFor) const
+template<class data>
+const T * Link<T>::Find(const data & searchFor) const
 {
 	const T * nextInList = Next();
 	while (nextInList != nullptr)
 	{
-		if ((*nextInList->data) == (*searchFor->data))
+		if ((*nextInList->data) == searchFor)
 			return nextInList;
 		nextInList = nextInList->Next();
 	}

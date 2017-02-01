@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "String.h"
 
 #ifdef _DEBUG
@@ -25,28 +24,30 @@ int main()
 	//std::cout << " - "<< t << std::endl;
 
 	String a = String("Pommes");
+	std::cout << a.size() << std::endl;
 	std::cout << a << std::endl;
 
 	a.resize(10);
 	std::cout << a << std::endl;
-	std::cout << a.size() << std::endl;
+	//std::cout << a.size() << std::endl;
 
 	a.at(1) = 'X';
 	a[4] = 'Y';
 
 	String b = String("ost");
 
-	a = b;
-
 	std::cout << a << std::endl;
 
-	a = 'X';
+	/*a = b;
 
 	std::cout << a << std::endl;
+	std::cout << b << std::endl;
 
 
+	a = "olles";
 
-
+	std::cout << a << std::endl;
+	std::cout <<b << std::endl;*/
 
 	std::cin.get();
 	return 0;

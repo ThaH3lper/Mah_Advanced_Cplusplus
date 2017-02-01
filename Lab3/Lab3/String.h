@@ -8,6 +8,9 @@
 class String {
 	char * charArray;
 
+	int strSize;
+	int memSize;
+
 	void copyMem(const char* cstr, int length);
 
 public:
@@ -15,7 +18,7 @@ public:
 	~String();
 
 	String(const String& rhs);
-	String(String&& rhs);		//VG
+	String(String&& rhs);					//VG
 	String(const char* cstr);
 
 	String& operator=(const String& rhs);
@@ -24,7 +27,7 @@ public:
 	String& operator=(char ch);
 
 	char& at(int i);
-	char& operator[](int i);
+	char& operator[](size_t i);
 	const char* data() const;
 
 	int size() const;
@@ -43,4 +46,4 @@ public:
 
 };
 
-std::ostream& operator<<(std::ostream& cout,String & obj);
+std::ostream& operator<<(std::ostream& cout, String & obj);

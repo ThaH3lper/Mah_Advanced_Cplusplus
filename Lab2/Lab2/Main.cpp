@@ -29,30 +29,20 @@ void TestDLL() {
 	myList.Check();
 	std::cout << myList << std::endl;
 	node3->Next();
-	Node<float>* search = new Node<float>(2);
-	Node<float> * temp2 = myList.Find(search);
-	delete search;
-	search = new Node<float>(1);
-	Node<float> * temp3 = temp2->Find(search);
-	delete search;
+	Node<float> * temp2 = myList.Find(2.f);
+	Node<float> * temp3 = temp2->Find(1.f);
 	Node<float> * temp5 = temp3->DeleteAfter();   //ta bort andra 2:an
 	myList.Check();
 	assert(*temp5->data == 2);
 	delete temp5;
 	std::cout << myList << std::endl;
 
-	search = new Node<float>(5);
-	Node<float> * tmpx = myList.Find(search);
-	delete search;
+	Node<float> * tmpx = myList.Find(5.f);
 	delete tmpx->DeleteAfter();
 	myList.Check();
 	std::cout << myList << std::endl;
-	search = new Node<float>(3);
-	tmpx = myList.Find(search);
-	delete search;
-	search = new Node<float>(3);
-	tmpx = tmpx->Find(search);
-	delete search;
+	tmpx = myList.Find(3.f);
+	tmpx = tmpx->Find(3.f);
 
 	tmpx->InsertBefore(new Node<float>(2))->InsertBefore(new Node<float>(1));
 	std::cout << myList << std::endl;
@@ -106,65 +96,21 @@ void TestDLL() {
 	std::cin.get();
 }
 
-
-//My test
-void PrintCheck(List<Node<char>> & list)
-{
-	list.Check();
-	std::cout << list << std::endl;
-}
-
-void charTest()
-{
-	List<Node<char>> list;
-	PrintCheck(list);
-
-	list.DeleteBefore();
-	PrintCheck(list);
-
-	list.InsertLast(new Node<char>('H'));
-	list.InsertLast(new Node<char>('E'));
-	list.InsertLast(new Node<char>('J'));
-	PrintCheck(list);
-
-	list.InsertFirst(new Node<char>('X'));
-	list.InsertFirst(new Node<char>('Y'));
-	PrintCheck(list);
-
-	Node<char> * search = new Node<char>('E');
-	Node<char> * charE = list.Find(search);
-	delete search;
-
-	delete charE->DeleteBefore();
-	PrintCheck(list);
-
-	delete charE->DeleteAfter();
-	PrintCheck(list);
-
-	delete charE->Next()->DeleteAfter();
-	PrintCheck(list);
-
-	delete charE->Prev()->DeleteBefore();
-	PrintCheck(list);
-
-	list.InsertLast(new Node<char>('L'));
-	list.InsertLast(new Node<char>('L'));
-
-	list.InsertFirst(new Node<char>('B'));
-	list.InsertFirst(new Node<char>('B'));
-	PrintCheck(list);
-
-	delete list.PopFirst();
-	delete list.PopLast();
-
-	PrintCheck(list);
-}
-
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	TestDLL();
+	List<Node<int>> list;
+
+	list.InsertFirst(new Node<int>(1));
+	list.InsertFirst(new Node<int>(2));
+	list.InsertFirst(new Node<int>(3));
+
+	const List<Node<int>> & clist = list;
+	const Node<int> * a = clist.Find(1);
+	
+
+	//TestDLL();
 	//charTest();
 
 	std::cin.get();

@@ -12,6 +12,7 @@ class String {
 	int memSize;
 
 	void copyMem(const char* cstr, int length);
+	void append(const char * cstr, int length);
 
 public:
 	String();
@@ -34,16 +35,15 @@ public:
 	void reserv(int i);
 	int capacity() const;
 	void shrink_to_fit();
-	void push_back(char c);
+	void push_back(char c); //Fix
 	void resize(int n);
 
 	String& operator+=(const String& rhs);
 	String& operator+=(char* cstr);
-	String& operator+(const String& rhs);
-	String& operator+(char* cstr);
+	String& operator+(const String& rhs);		//Leaks
+	String& operator+(char* cstr);				//Leaks 
 
 	friend bool operator==(const String& lhs, const String& rhs);
-
 };
 
 std::ostream& operator<<(std::ostream& cout, String & obj);

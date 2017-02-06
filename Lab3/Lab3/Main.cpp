@@ -9,45 +9,11 @@ int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	//String s = String("Pommes");
-	//std::cout << s << std::endl;
-	//String t = String("test");
-	//std::cout << t << std::endl;
-
-	//String x = String(s);
-	//std::cout << x << std::endl;
-
-	//std::cout << s.size() << std::endl;
-
-	//s.at(4) = 'x';
-	//std::cout << " - "<< s << std::endl;
-	//std::cout << " - "<< t << std::endl;
-
 	String a = String("Pommes");
-	std::cout << a.size() << std::endl;
-	std::cout << a << std::endl;
+	String y = String(" Korv !");
 
-	a.resize(10);
-	std::cout << a << std::endl;
-	//std::cout << a.size() << std::endl;
-
-	a.at(1) = 'X';
-	a[4] = 'Y';
-
-	String b = String("ost");
-
-	std::cout << a << std::endl;
-
-	/*a = b;
-
-	std::cout << a << std::endl;
-	std::cout << b << std::endl;
-
-
-	a = "olles";
-
-	std::cout << a << std::endl;
-	std::cout <<b << std::endl;*/
+	String p = a + y + a + y + a + y;
+	std::cout << p << std::endl;
 
 	std::cin.get();
 	return 0;

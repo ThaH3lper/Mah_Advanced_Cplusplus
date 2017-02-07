@@ -17,6 +17,7 @@ String::String()
 String::~String()
 {
 	delete[] charArray;
+	std::cout << "DELETE" << std::endl;
 }
 
 String::String(const String & rhs)
@@ -24,6 +25,13 @@ String::String(const String & rhs)
 	copyMem(rhs.data(), rhs.capacity());
 	strSize = rhs.size();
 	memSize = rhs.capacity();
+}
+
+String::String(String && rhs)
+{
+	String temp(rhs);
+	swap(*this, temp);
+	std::cout << "MoveConstructor" << std::endl;
 }
 
 String::String(const char * cstr)
@@ -46,6 +54,13 @@ String & String::operator=(const String & rhs)
 	strSize = rhs.size();
 	memSize = rhs.capacity();
 	copyMem(rhs.data(), rhs.capacity());
+	return *this;
+}
+
+String & String::operator=(String && rhs)
+{
+	String temp(rhs);
+	swap(*this, temp);
 	return *this;
 }
 
@@ -87,15 +102,11 @@ std::ostream & operator<<(std::ostream & cout, String & obj)
 	return cout;
 }
 
-/*indexerar med range check “Bounds checking is
-performed, exception of type std::out_of_range will be
-thrown on invalid access.”*/
 char & String::at(int i)			
 {
 	if (i >= strSize || i < 0)
-	{
-		//call shit here
-	}
+		throw std::out_of_range("Index out of range!");
+
 	char * pointer = charArray;
 	pointer += i;
 	return *pointer;
@@ -161,6 +172,13 @@ void String::append(const char * cstr, int length)
 	strSize += length;
 }
 
+void swap(String & rhs, String & lhs)
+{
+	std::swap(lhs.memSize, rhs.memSize);
+	std::swap(lhs.strSize, rhs.strSize);
+	std::swap(lhs.charArray, rhs.charArray);
+}
+
 String & String::operator+=(const String & rhs)
 {
 	append(rhs.data(), rhs.size());
@@ -173,23 +191,20 @@ String & String::operator+=(char * cstr)
 	return *this;
 }
 
-String & String::operator+(const String & rhs)
-{
-	String * returnStr = new String(*this);
-	std::cout << *returnStr << std::endl;
-	*returnStr += rhs;
-	std::cout << *returnStr << std::endl;
-	return *returnStr;
-}
-
-String & String::operator+(char * cstr)
-{
-	return *this;
-}
 
 void String::push_back(char c)
 {
+	String temp = String();
+	temp = c;
+	*this += temp;
+}
 
+String operator+(const String& rhs, const String& lhs)
+{
+	String str = rhs;
+	str += lhs;
+	//return str;
+	return lhs;
 }
 
 bool operator==(const String& lhs, const String& rhs)

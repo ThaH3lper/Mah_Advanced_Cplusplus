@@ -12,8 +12,17 @@ int main()
 	String a = String("Pommes");
 	String y = String(" Korv !");
 
-	String p = a + y + a + y + a + y;
-	std::cout << p << std::endl;
+	try
+	{
+		a.at(1000);
+	}
+	catch (const std::out_of_range& s)
+	{
+	}
+
+
+	//std::cout << (a + y).data() << std::endl;
+	//a = a + y;
 
 	std::cin.get();
 	return 0;

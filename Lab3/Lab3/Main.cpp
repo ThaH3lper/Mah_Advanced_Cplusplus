@@ -199,6 +199,7 @@ void TestFörVälGodkäntString() {
 	//move
 	const char* strdata = str.data();
 	String mStr(std::move(str));
+
 	assert(strdata == mStr.data());
 	assert(nullptr == str.data());
 
@@ -210,12 +211,32 @@ void TestFörVälGodkäntString() {
 #endif //VG
 }
 
+void testResize()
+{
+	String a("Hej");			//Skapa Hej
+	a.printMem();
+	std::cout << std::endl;
+
+	a.reserv(10);				//Gör minnet 10 stort
+	a.printMem();
+	std::cout << std::endl;
+
+	a.shrink_to_fit();			//Shrink to fit, dvs 3
+	a.printMem();
+	std::cout << std::endl;
+
+	a.resize(10);				//Resize till 10, fyller ut med '\0';
+	a.printMem();
+	std::cout << std::endl;
+}
+
 int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	std::locale::global(std::locale("swedish"));
 	//TestUnsigned();
 	TestFörGodkäntString();
 	TestFörVälGodkäntString();
+	testResize();
 	cin.get();
 }
 

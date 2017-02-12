@@ -1,11 +1,10 @@
 #include "String.h"
 
-void String::copyMem(const char * cstr, int length)
+void String::copyMem(const char * cstr, size_t length)
 {
 	int lengthWithTerminator = length + 1;
 	charArray = new char[lengthWithTerminator];
 	memcpy(charArray, cstr, lengthWithTerminator);
-	//assert(invariant());
 }
 
 String::String(size_t n)
@@ -14,6 +13,7 @@ String::String(size_t n)
 	strSize = 0;
 	memSize = 0;
 	reserv(n);
+	assert(invariant());
 }
 
 String::String()
@@ -21,6 +21,7 @@ String::String()
 	charArray = new char();
 	strSize = 0;
 	memSize = 0;
+	assert(invariant());
 }
 
 String::~String()
@@ -38,8 +39,8 @@ String::String(const String & rhs)
 String::String(String && rhs)
 {
 	charArray = nullptr;
-	String temp(rhs);
-	swap(*this, temp);
+	swap(*this, rhs);
+	assert(invariant());
 }
 
 String::String(const char * cstr)
@@ -48,19 +49,39 @@ String::String(const char * cstr)
 		String();
 		return;
 	}
+	copyMem(cstr, strlen(cstr));
 	strSize = strlen(cstr);
 	memSize = strSize;
-	copyMem(cstr, strSize);
+	assert(invariant());
 }
 
 String & String::operator=(const String & rhs)
 {
 	if (this == &rhs)
 		return *this;
+
+	if (rhs.size() <= strSize)
+	{
+		memcpy(charArray, rhs.data(), rhs.size());
+		strSize = rhs.size();
+		memSize = rhs.capacity();
+		charArray[strSize] = '\0';
+	}
+	else
+	{
+		char * tempPtr = charArray;
+		copyMem(rhs.data(), rhs.capacity());
+		strSize = rhs.size();
+		memSize = rhs.capacity();
+		delete[] tempPtr;
+	}
+		
+
 	delete[] charArray;
 	strSize = rhs.size();
 	memSize = rhs.capacity();
 	copyMem(rhs.data(), rhs.capacity());
+	assert(invariant());
 	return *this;
 }
 
@@ -69,10 +90,11 @@ String & String::operator=(String && rhs)
 	if (this == &rhs)
 		return *this;
 
-	delete[] charArray;
-	charArray = nullptr;
-	String temp(rhs);
-	swap(*this, temp);
+	swap(*this, rhs);
+	delete[] rhs.charArray;
+	rhs.charArray = nullptr;
+
+	assert(invariant());
 	return *this;
 }
 
@@ -86,17 +108,21 @@ String & String::operator=(const char * cstr)
 	strSize = strlen(cstr);
 	memSize = strSize;
 	copyMem(cstr, strlen(cstr));
+	assert(invariant());
 	return *this;
 }
 
 String & String::operator=(char ch)
 {
+	std::unique_ptr<char> temp(new char[2]);	//exception safty
 	delete[] charArray;
-	charArray = new char[2];
+	charArray = temp.get();
 	charArray[0] = ch;
 	charArray[1] = '\0';
+	temp.release();								//release object
 	strSize = 1;
 	memSize = 1;
+	assert(invariant());
 	return *this;
 }
 
@@ -130,25 +156,27 @@ const char & String::operator[](size_t i) const{
 
 const char * String::data() const { return charArray;}
 
-int String::size() const { 
+size_t String::size() const {
 	return strSize; 
 }
 
-void String::reserv(size_t i)
+void String::reserv(size_t i)								//can only expand memory.
 {
 	if (i <= memSize)
 		return;
-	resize(i);
+	resizeMem(i);
+	assert(invariant());
 }
 
-int String::capacity() const { return memSize; }
+size_t String::capacity() const { return memSize; }
 
 void String::shrink_to_fit()
 {
-	resize(strSize);
+	resizeMem(strSize);
 }
 
-void String::resize(size_t n)
+
+void String::resizeMem(size_t n)							//resize the memory up or down.
 {
 	if (memSize == n)
 		return;
@@ -156,9 +184,9 @@ void String::resize(size_t n)
 	char * temp = new char[n + 1];
 	if (n > memSize)
 	{
-		if(!charArray)
+		if(charArray)
 			memcpy(temp, charArray, memSize);
-		memset(temp + memSize, char(), n - strSize + 1);
+		memset(temp + strSize, char(), 1);
 	}
 	else
 	{
@@ -167,15 +195,16 @@ void String::resize(size_t n)
 		strSize = n;
 	}
 	memSize = n;
-	if (!charArray)
+	if (charArray)
 		delete[] charArray;
 	charArray = temp;
+	assert(invariant());
 }
 
 void String::printMem() const
 {
 	std::cout << "|";
-	for (size_t i = 0; i < memSize + 1; i++)
+	for (size_t i = 0; i < memSize; i++)
 	{
 		if (charArray[i] == '\0')
 			std::cout << "/0" << "|";
@@ -184,19 +213,21 @@ void String::printMem() const
 	}
 }
 
-void String::append(const char * cstr, int length)
+void String::append(const char * cstr, size_t length)
 {
-	int requiredSize = strSize + length;
+	size_t requiredSize = strSize + length;
 	if (memSize < requiredSize)
 		reserv(requiredSize * 2);
 
 	memcpy(charArray + strSize, cstr, length);
 	strSize += length;
+	memset(charArray + strSize, char(), 1);
+	assert(invariant());
 }
 
 bool String::invariant()
 {
-	return (charArray == nullptr || (charArray[memSize] == '\0' && memSize >= strSize));
+	return (charArray == nullptr || (charArray[strSize] == '\0' && memSize >= strSize));
 }
 
 /*
@@ -229,6 +260,15 @@ void String::push_back(char c)
 	temp = c;
 	*this += temp;
 }
+void String::resize(size_t n)
+{
+	if (n == strSize)
+		return;
+	if (n > memSize)
+		reserv(n);
+
+	memset(charArray + strSize, char(), n - strSize + 1);
+}
 /*
 	Swap
 */
@@ -250,9 +290,6 @@ std::ostream & operator<<(std::ostream & cout, String & obj)
 
 bool operator==(const String& lhs, const String& rhs)
 {
-	if (rhs.capacity() != lhs.capacity())
-		return false;
-
 	if (rhs.size() != lhs.size())
 		return false;
 

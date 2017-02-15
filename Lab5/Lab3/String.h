@@ -2,6 +2,7 @@
 #include <iostream>
 #include <assert.h>
 #include <memory>
+#include "Iterators.h"
 
 #ifdef _DEBUG
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -52,6 +53,9 @@ public:
 	String& operator+=(const String& rhs);
 	String& operator+=(char* cstr);
 	String operator+(const String& lhs);
+
+	BaseIterator<Iterator, char> & begin();
+	BaseIterator<Iterator, char> end();
 
 	friend void swap(String & rhs, String & lhs);
 };

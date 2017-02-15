@@ -19,6 +19,7 @@ using std::cout;
 using std::cin;
 
 #include <cassert>
+#include "Iterators.h"
 
 void TestPushBackReallocation() {
 	String str("hej");
@@ -234,9 +235,17 @@ int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	std::locale::global(std::locale("swedish"));
 	//TestUnsigned();
-	TestFörGodkäntString();
-	TestFörVälGodkäntString();
-	testResize();
+	//TestFörGodkäntString();
+	//TestFörVälGodkäntString();
+	//testResize();
+
+	String a("Pommes");
+
+	for (auto i = a.begin(); i != a.end(); ++i)
+	{
+		std::cout << *i << std::endl;
+	}
+
 	cin.get();
 }
 

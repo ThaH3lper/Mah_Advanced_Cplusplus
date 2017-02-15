@@ -256,6 +256,16 @@ String String::operator+(const String & lhs)
 	return temp;
 }
 
+BaseIterator<Iterator, char> & String::begin()
+{
+	return BaseIterator<Iterator, char>(charArray);
+}
+
+BaseIterator<Iterator, char> String::end()
+{
+	return BaseIterator<Iterator, char>(charArray + strSize);
+}
+
 void String::push_back(char c)
 {
 	String temp = String();

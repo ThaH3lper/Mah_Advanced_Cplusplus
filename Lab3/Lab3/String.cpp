@@ -1,10 +1,10 @@
 #include "String.h"
 
-void String::copyMem(const char * cstr, size_t length)
+void String::makeMemoryAndCopy(const char * ptr, size_t length)
 {
 	int lengthWithTerminator = length + 1;
 	charArray = new char[lengthWithTerminator];
-	memcpy(charArray, cstr, lengthWithTerminator);
+	memcpy(charArray, ptr, lengthWithTerminator);
 }
 
 String::String(size_t n)
@@ -31,7 +31,7 @@ String::~String()
 
 String::String(const String & rhs)
 {
-	copyMem(rhs.data(), rhs.capacity());
+	makeMemoryAndCopy(rhs.data(), rhs.capacity());
 	strSize = rhs.size();
 	memSize = rhs.capacity();
 }
@@ -45,11 +45,11 @@ String::String(String && rhs)
 
 String::String(const char * cstr)
 {
-	if (!cstr){
+	if (!cstr) {
 		String();
 		return;
 	}
-	copyMem(cstr, strlen(cstr));
+	makeMemoryAndCopy(cstr, strlen(cstr));
 	strSize = strlen(cstr);
 	memSize = strSize;
 	assert(invariant());
@@ -60,7 +60,7 @@ String & String::operator=(const String & rhs)
 	if (this == &rhs)
 		return *this;
 
-	if (rhs.size() <= strSize)
+	if (rhs.size() <= memSize)
 	{
 		memcpy(charArray, rhs.data(), rhs.size());
 		strSize = rhs.size();
@@ -70,17 +70,11 @@ String & String::operator=(const String & rhs)
 	else
 	{
 		char * tempPtr = charArray;
-		copyMem(rhs.data(), rhs.capacity());
+		makeMemoryAndCopy(rhs.data(), rhs.capacity());
 		strSize = rhs.size();
 		memSize = rhs.capacity();
 		delete[] tempPtr;
 	}
-		
-
-	delete[] charArray;
-	strSize = rhs.size();
-	memSize = rhs.capacity();
-	copyMem(rhs.data(), rhs.capacity());
 	assert(invariant());
 	return *this;
 }
@@ -104,24 +98,36 @@ String & String::operator=(const char * cstr)
 		String();
 		return *this;
 	}
-	delete[] charArray;
-	strSize = strlen(cstr);
-	memSize = strSize;
-	copyMem(cstr, strlen(cstr));
+	int newSize = strlen(cstr);
+	if (newSize + 1 <= memSize)
+	{
+		memcpy(charArray, cstr, newSize + 1);		
+	}
+	else
+	{
+		char * temp = charArray;
+		makeMemoryAndCopy(cstr, newSize);
+		delete[] temp;
+		memSize = newSize;
+	}
+	strSize = newSize;
 	assert(invariant());
 	return *this;
 }
 
 String & String::operator=(char ch)
 {
-	std::unique_ptr<char> temp(new char[2]);	//exception safty
-	delete[] charArray;
-	charArray = temp.get();
+	if (memSize < 2)
+	{
+		char* temp = new char[2];
+		delete[] charArray;
+		charArray = temp;
+	}
 	charArray[0] = ch;
 	charArray[1] = '\0';
-	temp.release();								//release object
 	strSize = 1;
 	memSize = 1;
+
 	assert(invariant());
 	return *this;
 }
@@ -131,9 +137,7 @@ char & String::at(size_t i)
 	if (i >= strSize)
 		throw std::out_of_range("Index out of range!");
 
-	char * pointer = charArray;
-	pointer += i;
-	return *pointer;
+	return *(charArray+i);
 }
 
 const char & String::at(size_t i) const
@@ -141,23 +145,21 @@ const char & String::at(size_t i) const
 	if (i >= strSize)
 		throw std::out_of_range("Index out of range!");
 
-	char * pointer = charArray;
-	pointer += i;
-	return *pointer;
+	return *(charArray + i);
 }
 
-char & String::operator[](size_t i) { 
-	return charArray[i]; 
-}
-
-const char & String::operator[](size_t i) const{
+char & String::operator[](size_t i) {
 	return charArray[i];
 }
 
-const char * String::data() const { return charArray;}
+const char & String::operator[](size_t i) const {
+	return charArray[i];
+}
+
+const char * String::data() const { return charArray; }
 
 size_t String::size() const {
-	return strSize; 
+	return strSize;
 }
 
 void String::reserv(size_t i)								//can only expand memory.
@@ -184,7 +186,7 @@ void String::resizeMem(size_t n)							//resize the memory up or down.
 	char * temp = new char[n + 1];
 	if (n > memSize)
 	{
-		if(charArray)
+		if (charArray)
 			memcpy(temp, charArray, memSize);
 		memset(temp + strSize, char(), 1);
 	}

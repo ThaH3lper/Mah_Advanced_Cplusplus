@@ -13,7 +13,7 @@ class String {
 	size_t strSize;
 	size_t memSize;
 
-	void copyMem(const char* cstr, size_t length);
+	void makeMemoryAndCopy(const char* cstr, size_t length);
 	void append(const char * cstr, size_t length);
 	void resizeMem(size_t n);		//Can the memory smaller or greater.
 	bool invariant();

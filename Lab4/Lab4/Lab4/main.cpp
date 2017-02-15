@@ -90,7 +90,7 @@ template <class ForwardIterator>
 void ForwardSort(ForwardIterator begin, ForwardIterator end)
 {
 	ForwardIterator moveEnd = end;
-	for (auto it = begin; it != end; it++)		//Bubbel sort O(n^2)
+	for (auto it = begin; it != end; it++)		//Bubbel sort.
 	{
 		ForwardIterator before = begin;
 		for (auto i = begin; i != moveEnd; i++)
@@ -109,7 +109,10 @@ void upg3()
 {
 	std::cout << std::endl << "Upg 3" << std::endl;
 
-	std::forward_list<int> list{9, 2, 7, 3, 4, 1, 6, 5, 8, 0};		//Create a forward list that needs to be sorted
+	srand((unsigned)time(NULL));
+	std::forward_list<int> list(20);
+	for (auto it = list.begin(); it != list.end(); it++)			//Fill the array with 20 numbers randomzied between 0-49;
+		*it = rand() % 50;
 
 	print(list.begin(), list.end());								//Print
 

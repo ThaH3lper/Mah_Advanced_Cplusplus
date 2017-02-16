@@ -243,7 +243,7 @@ int main() {
 
 	for (auto i = a.begin(); i != a.end(); ++i)
 	{
-		std::cout << *i << std::endl;
+		std::cout << *i << std::endl;	
 	}
 
 	cin.get();

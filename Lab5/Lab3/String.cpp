@@ -256,7 +256,7 @@ String String::operator+(const String & lhs)
 	return temp;
 }
 
-BaseIterator<Iterator, char> & String::begin()
+BaseIterator<Iterator, char> String::begin()
 {
 	return BaseIterator<Iterator, char>(charArray);
 }

@@ -54,8 +54,8 @@ public:
 	String& operator+=(char* cstr);
 	String operator+(const String& lhs);
 
-	BaseIterator<Iterator, char> & begin();
-	BaseIterator<Iterator, char> end();
+	BaseIterator<Iterator, char> begin();	//?Reference works
+	BaseIterator<Iterator, char> end();		//?Reference not working
 
 	friend void swap(String & rhs, String & lhs);
 };

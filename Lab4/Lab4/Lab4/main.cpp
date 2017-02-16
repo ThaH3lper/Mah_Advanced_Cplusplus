@@ -83,6 +83,7 @@ void upg2()
 	auto listEnd = std::remove_if(list.begin(), list.end(), [](int i) {return i % 2 == 0; });	//Move all even numbers to the end of the list.
 	list.erase(listEnd, list.end());															//remove the even numbers from the end.
 
+
 	print(list.begin(), list.end());															//Print
 }
 
@@ -123,9 +124,9 @@ void upg3()
 
 int main()
 {
-	upg1();
+	//upg1();
 	upg2();
-	upg3();
+	//upg3();
 
 	std::cin.get();
 	return 0;

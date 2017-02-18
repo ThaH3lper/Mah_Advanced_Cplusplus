@@ -24,12 +24,27 @@
     <ClInclude Include="Iterators.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StringIttTest.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringTest.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VG.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringIttTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

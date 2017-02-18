@@ -8,6 +8,12 @@
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #endif
 
+template<class ValueType>
+class Iterator;
+
+template<class ValueType>
+class ReverseIterator;
+
 class String {
 	char * charArray;
 
@@ -20,6 +26,9 @@ class String {
 	bool invariant();
 
 public:
+	typedef Iterator<char> iterator;
+	typedef ReverseIterator<char> reverse_iterator;
+
 	String();
 	~String();
 
@@ -54,8 +63,11 @@ public:
 	String& operator+=(char* cstr);
 	String operator+(const String& lhs);
 
-	BaseIterator<Iterator, char> begin();	//?Reference works
-	BaseIterator<Iterator, char> end();		//?Reference not working
+	iterator begin();	//?Reference works
+	iterator end();		//?Reference not working
+
+	reverse_iterator rbegin();
+	reverse_iterator rend();
 
 	friend void swap(String & rhs, String & lhs);
 };

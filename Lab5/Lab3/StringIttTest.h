@@ -8,4 +8,5 @@ void TestIttPartCR();
 
 void TestIttInAlg();
 void TestRevIttInAlg();
+void TestFörGodkäntItt();
 

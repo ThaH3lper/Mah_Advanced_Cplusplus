@@ -8,11 +8,8 @@
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #endif
 
-template<class ValueType>
+template<class ValueType, bool Reverse>
 class Iterator;
-
-template<class ValueType>
-class ReverseIterator;
 
 class String {
 	char * charArray;
@@ -26,8 +23,8 @@ class String {
 	bool invariant();
 
 public:
-	typedef Iterator<char> iterator;
-	typedef ReverseIterator<char> reverse_iterator;
+	typedef Iterator<char, false> iterator;
+	typedef Iterator<char, true> reverse_iterator;
 
 	String();
 	~String();

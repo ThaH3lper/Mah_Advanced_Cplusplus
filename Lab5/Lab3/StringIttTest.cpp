@@ -36,7 +36,6 @@ void TestIttInAlg() {
     std::stable_sort(b, e);
 
     cout << v << endl;
-
 }
 
 void TestRevIttInAlg() {

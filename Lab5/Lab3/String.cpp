@@ -256,24 +256,24 @@ String String::operator+(const String & lhs)
 	return temp;
 }
 
-Iterator<char> String::begin()
+Iterator<char, false> String::begin()
 {
-	return Iterator<char>(charArray);
+	return Iterator<char, false>(charArray);
 }
 
-Iterator<char> String::end()
+Iterator<char, false> String::end()
 {
-	return Iterator<char>(charArray + strSize);
+	return Iterator<char, false>(charArray + strSize);
 }
 
-ReverseIterator<char> String::rbegin()
+Iterator<char, true> String::rbegin()
 {
-	return ReverseIterator<char>(charArray + strSize - 1);
+	return Iterator<char, true>(charArray + strSize - 1);
 }
 
-ReverseIterator<char> String::rend()
+Iterator<char, true> String::rend()
 {
-	return ReverseIterator<char>(charArray - 1);
+	return Iterator<char, true>(charArray - 1);
 }
 
 void String::push_back(char c)

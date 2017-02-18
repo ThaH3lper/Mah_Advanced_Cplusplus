@@ -39,34 +39,15 @@ int main() {
 #ifdef ITT
     TestIttPart();
 	TestIttPartR();
+
 #ifdef VG
     TestIttPartC();
     TestIttPartCR();
 #endif VG
     TestIttInAlg();
     TestRevIttInAlg();
+	TestFörGodkäntItt();
 #endif ITT
-
-	static const int N = 26;
-	String v;
-	v.reserv(N);
-	for (int i = 0; i < N; ++i) {
-		v.push_back('a' + i);
-	}
-	v.begin();
-	auto b = std::begin(v);
-	auto e = std::end(v);
-
-	for (auto i = b; i < e; ++i) {
-		std::cout << *i;
-	}
-
-	std::random_shuffle(b, e);
-
-	std::cout << v << std::endl;
-	//std::stable_sort(b, e);
-
-	std::cout << v << std::endl;
     cin.get();
 }
 

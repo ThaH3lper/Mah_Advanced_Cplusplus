@@ -12,51 +12,19 @@ class BaseIterator : std::iterator<std::random_access_iterator_tag, ValueType>
 	pointer ptr; //use typedefs?
 public:
 
-	BaseIterator(ValueType* value) {
-		ptr = value;
-		std::cout << "CREATE" << std::endl;
-	}
+	BaseIterator(ValueType * value);
+	BaseIterator<IteratorType, ValueType>(BaseIterator<IteratorType, ValueType>&& rhs);
+	BaseIterator<IteratorType, ValueType>& operator=(const ValueType* value);
 
-	BaseIterator(BaseIterator&& rhs) {
-		ptr = nullptr;
-		std::swap(ptr, rhs.ptr);
-	}
+	ValueType& operator[](size_t i);
 
-	BaseIterator& operator=(const ValueType* value) {
-		ptr = value;
-	}
+	bool operator!=(const BaseIterator<IteratorType, ValueType> & lhs);
+	bool operator==(const BaseIterator<IteratorType, ValueType> & lhs);
 
-	ValueType& operator[](size_t i) {
-		return *(ptr + i);
-	}
-
-	bool operator!=(const BaseIterator & lhs) {
-		return (*ptr != *lhs.ptr);
-	}
-
-	bool operator==(const BaseIterator & lhs) {
-		return (*ptr == *lhs.ptr);
-	}
-
-	BaseIterator& operator++() {		//Prefix ++i
-		++ptr;
-		return *this;
-	}
-
-	BaseIterator operator++(int) {		//Postfix i++
-		BaseIterator temp(ptr);
-		++ptr;
-		return temp;
-	}
-
-	BaseIterator<IteratorType, ValueType>& operator--() {		//Prefix --i
-		--ptr;
-		return *this;
-	}
-
-	ValueType& operator*() {
-		return *ptr;
-	}
+	BaseIterator<IteratorType, ValueType>& operator++();		//Prefix ++i
+	BaseIterator<IteratorType, ValueType> operator++(int);		//Postfix i++
+	BaseIterator<IteratorType, ValueType>& operator--();		//Prefix --i
+	ValueType& operator*();
 };
 
 class Iterator
@@ -78,4 +46,3 @@ class ConstReverseIterator
 {
 
 };
-

@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Iterators.hpp"
 #include "String.h"
 
 #ifdef _DEBUG
@@ -19,7 +20,6 @@ using std::cout;
 using std::cin;
 
 #include <cassert>
-#include "Iterators.h"
 
 void TestPushBackReallocation() {
 	String str("hej");

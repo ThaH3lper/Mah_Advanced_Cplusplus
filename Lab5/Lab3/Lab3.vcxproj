@@ -114,6 +114,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Iterators.hpp" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Iterators.h" />
   </ItemGroup>

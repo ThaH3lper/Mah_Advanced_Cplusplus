@@ -72,6 +72,9 @@ void TestIttPart() {
     assert(*++it == 'b');
     assert(*(it + 1) == 'a');
     assert(it[2] == 'r');
+
+	const String t = s1;
+	String::const_iterator itt;
 }
 
 void TestIttPartR() {

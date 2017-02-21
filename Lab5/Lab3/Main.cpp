@@ -48,6 +48,7 @@ int main() {
     TestRevIttInAlg();
 	TestFörGodkäntItt();
 #endif ITT
+
     cin.get();
 }
 

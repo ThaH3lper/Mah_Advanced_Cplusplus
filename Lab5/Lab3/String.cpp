@@ -256,24 +256,44 @@ String String::operator+(const String & lhs)
 	return temp;
 }
 
-Iterator<char, false> String::begin()
+String::iterator String::begin()
 {
-	return Iterator<char, false>(charArray);
+	return iterator(charArray);
 }
 
-Iterator<char, false> String::end()
+String::iterator String::end()
 {
-	return Iterator<char, false>(charArray + strSize);
+	return iterator(charArray + strSize);
 }
 
-Iterator<char, true> String::rbegin()
+String::reverse_iterator String::rbegin()
 {
-	return Iterator<char, true>(charArray + strSize - 1);
+	return reverse_iterator(charArray + strSize - 1);
 }
 
-Iterator<char, true> String::rend()
+String::reverse_iterator String::rend()
 {
-	return Iterator<char, true>(charArray - 1);
+	return reverse_iterator(charArray - 1);
+}
+
+String::const_iterator String::cbegin() const
+{
+	return String::const_iterator(charArray);
+}
+
+String::const_iterator String::cend() const
+{
+	return String::const_iterator(charArray + strSize);
+}
+
+String::const_reverse_iterator String::crbegin() const
+{
+	return const_reverse_iterator(charArray + strSize - 1);
+}
+
+String::const_reverse_iterator String::crend() const
+{
+	return const_reverse_iterator(charArray - 1);
 }
 
 void String::push_back(char c)

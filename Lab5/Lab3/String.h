@@ -25,6 +25,8 @@ class String {
 public:
 	typedef Iterator<char, false> iterator;
 	typedef Iterator<char, true> reverse_iterator;
+	typedef Iterator<const char, false> const_iterator;
+	typedef Iterator<const char, true> const_reverse_iterator;
 
 	String();
 	~String();
@@ -65,6 +67,12 @@ public:
 
 	reverse_iterator rbegin();
 	reverse_iterator rend();
+
+	const_iterator cbegin() const;
+	const_iterator cend() const;
+
+	const_reverse_iterator crbegin() const;
+	const_reverse_iterator crend() const;
 
 	friend void swap(String & rhs, String & lhs);
 };

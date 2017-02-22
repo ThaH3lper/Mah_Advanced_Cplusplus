@@ -1,3 +1,3 @@
 
-//#define VG
-//#define ITT
+#define VG
+#define ITT

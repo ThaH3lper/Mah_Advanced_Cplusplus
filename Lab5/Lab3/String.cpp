@@ -266,15 +266,15 @@ String::iterator String::end()
 	return iterator(charArray + strSize);
 }
 
-//String::reverse_iterator String::rbegin()
-//{
-//	return reverse_iterator(charArray + strSize - 1);
-//}
-//
-//String::reverse_iterator String::rend()
-//{
-//	return reverse_iterator(charArray - 1);
-//}
+String::reverse_iterator String::rbegin()
+{
+	return reverse_iterator(charArray + strSize - 1);
+}
+
+String::reverse_iterator String::rend()
+{
+	return reverse_iterator(charArray - 1);
+}
 
 String::const_iterator String::cbegin() const
 {
@@ -286,15 +286,15 @@ String::const_iterator String::cend() const
 	return String::const_iterator(charArray + strSize);
 }
 
-//String::const_reverse_iterator String::crbegin() const
-//{
-//	return const_reverse_iterator(charArray + strSize - 1);
-//}
-//
-//String::const_reverse_iterator String::crend() const
-//{
-//	return const_reverse_iterator(charArray - 1);
-//}
+String::const_reverse_iterator String::crbegin() const
+{
+	return const_reverse_iterator(charArray + strSize - 1);
+}
+
+String::const_reverse_iterator String::crend() const
+{
+	return const_reverse_iterator(charArray - 1);
+}
 
 void String::push_back(char c)
 {

@@ -11,6 +11,9 @@
 template<class ValueType>
 class Iterator;
 
+template<class ValueType>
+class ReverseIterator;
+
 class String {
 	char * charArray;
 
@@ -24,9 +27,9 @@ class String {
 
 public:
 	typedef Iterator<char> iterator;
-	//typedef Iterator<char, true> reverse_iterator;
+	typedef ReverseIterator<char> reverse_iterator;
 	typedef Iterator<const char> const_iterator;
-	//typedef Iterator<const char, true> const_reverse_iterator;
+	typedef ReverseIterator<const char> const_reverse_iterator;
 
 	String();
 	~String();
@@ -65,14 +68,14 @@ public:
 	iterator begin();
 	iterator end();	
 
-	//reverse_iterator rbegin();
-	//reverse_iterator rend();
+	reverse_iterator rbegin();
+	reverse_iterator rend();
 
 	const_iterator cbegin() const;
 	const_iterator cend() const;
 
-	//const_reverse_iterator crbegin() const;
-	//const_reverse_iterator crend() const;
+	const_reverse_iterator crbegin() const;
+	const_reverse_iterator crend() const;
 
 	friend void swap(String & rhs, String & lhs);
 };

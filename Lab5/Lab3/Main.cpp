@@ -31,9 +31,8 @@ int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	std::locale::global(std::locale("swedish"));
 	//TestUnsigned();
-	//String s("hej");
-	//TestFörGodkäntString();
 
+	TestFörGodkäntString();
 #ifdef VG
 	TestFörVälGodkäntString();
 #endif VG

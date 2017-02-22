@@ -1,41 +1,68 @@
 #pragma once
 #include <algorithm>
 
-template<class ValueType, bool Reverse>
-class Iterator : public std::iterator<std::random_access_iterator_tag, ValueType, int>
+template<class IteratorType, class ValueType>
+class BaseIterator;
+
+template<class IteratorType, class ValueType>
+class BaseIterator : public std::iterator <std::random_access_iterator_tag, ValueType>
 {
+protected:
 	ValueType * ptr;
-
 public:
-	Iterator();
-	Iterator(ValueType * value);
-	Iterator(Iterator&& value);
-	Iterator(const Iterator& value);
+	BaseIterator();
+	BaseIterator(ValueType * value);
+	BaseIterator(IteratorType&& value);
+	BaseIterator(const IteratorType& value);
 
-	Iterator& operator=(const Iterator & value);
+	IteratorType& operator=(const IteratorType & value);
 
 	ValueType& operator[](size_t i);
-	int operator-(const Iterator & rhs);
+	ptrdiff_t operator-(const IteratorType & rhs);
 	virtual ValueType& operator*();
 
-	Iterator operator++();			//Prefix ++i
-	Iterator operator++(int);		//Postfix i++
+	IteratorType & operator++();			//Prefix ++i
+	IteratorType operator++(int);		//Postfix i++
 
-	Iterator operator--();			//Prefix --i
+	IteratorType operator--();			//Prefix --i add &
 
-	Iterator operator+(int i);
-	Iterator operator-(int i);
+	IteratorType operator+(int i);
+	IteratorType operator-(int i);
 
-	Iterator operator+=(int i);
-	Iterator operator-=(int i);
+	IteratorType operator+=(int i);
+	IteratorType operator-=(int i);
 
-	bool operator!=(const Iterator & rhs);
-	bool operator==(const Iterator & rhs);
-	bool operator<(const Iterator & rhs);
+	bool operator!=(const IteratorType & rhs);
+	bool operator==(const IteratorType & rhs);
+	bool operator<(const IteratorType & rhs);
 };
 
-template<class ValueType, bool Reverse>
-bool operator==(const Iterator<ValueType, Reverse> & lhs, const Iterator<ValueType, Reverse> & rhs);
+template<class IteratorType, class ValueType>
+bool operator==(const BaseIterator<IteratorType, ValueType> & lhs, const BaseIterator<IteratorType, ValueType> & rhs);
+
+template<class ValueType>
+class Iterator : public BaseIterator<Iterator<ValueType>, ValueType>
+{
+public:
+	Iterator() : BaseIterator() {}
+	Iterator(ValueType * value) : BaseIterator(value) {}
+	Iterator(Iterator&& value) : BaseIterator(value) {}
+	Iterator(const Iterator& value) : BaseIterator(value) {}
+
+	Iterator& operator=(const Iterator & value)
+	{
+		if (value.ptr == ptr)
+			return *this;
+		ptr = value.ptr;
+		return *this;
+	}
+};
+
+template<class ValueType>
+class ReverseIterator : BaseIterator<Iterator<ValueType>, ValueType>
+{
+
+};
 
 
 

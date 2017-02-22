@@ -8,7 +8,7 @@
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #endif
 
-template<class ValueType, bool Reverse>
+template<class ValueType>
 class Iterator;
 
 class String {
@@ -23,10 +23,10 @@ class String {
 	bool invariant();
 
 public:
-	typedef Iterator<char, false> iterator;
-	typedef Iterator<char, true> reverse_iterator;
-	typedef Iterator<const char, false> const_iterator;
-	typedef Iterator<const char, true> const_reverse_iterator;
+	typedef Iterator<char> iterator;
+	//typedef Iterator<char, true> reverse_iterator;
+	typedef Iterator<const char> const_iterator;
+	//typedef Iterator<const char, true> const_reverse_iterator;
 
 	String();
 	~String();
@@ -62,17 +62,17 @@ public:
 	String& operator+=(char* cstr);
 	String operator+(const String& lhs);
 
-	iterator begin();	//?Reference works
-	iterator end();		//?Reference not working
+	iterator begin();
+	iterator end();	
 
-	reverse_iterator rbegin();
-	reverse_iterator rend();
+	//reverse_iterator rbegin();
+	//reverse_iterator rend();
 
 	const_iterator cbegin() const;
 	const_iterator cend() const;
 
-	const_reverse_iterator crbegin() const;
-	const_reverse_iterator crend() const;
+	//const_reverse_iterator crbegin() const;
+	//const_reverse_iterator crend() const;
 
 	friend void swap(String & rhs, String & lhs);
 };

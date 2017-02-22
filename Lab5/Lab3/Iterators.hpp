@@ -2,20 +2,20 @@
 
 #include "Iterators.h"
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse>::Iterator()
+template<class IteratorType, class ValueType>
+BaseIterator<IteratorType, ValueType>::BaseIterator()
 {
 	ptr = nullptr;
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse>::Iterator(ValueType * value)
+template<class IteratorType, class ValueType>
+BaseIterator<IteratorType, ValueType>::BaseIterator(ValueType * value)
 {
 	ptr = value;
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse>::Iterator(Iterator && value)
+template<class IteratorType, class ValueType>
+BaseIterator<IteratorType, ValueType>::BaseIterator(IteratorType && value)
 {
 	if (value.ptr == ptr)
 		return;
@@ -23,120 +23,123 @@ Iterator<ValueType, Reverse>::Iterator(Iterator && value)
 	std::swap(ptr, value.ptr);
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse>::Iterator(const Iterator & value)
+template<class IteratorType, class ValueType>
+BaseIterator<IteratorType, ValueType>::BaseIterator(const IteratorType & value)
 {
 	if (value.ptr == ptr)
 		return;
 	ptr = value.ptr;
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> & Iterator<ValueType, Reverse>::operator=(const Iterator & value)
+template<class IteratorType, class ValueType>
+IteratorType & BaseIterator<IteratorType, ValueType>::operator=(const IteratorType & value)
 {
 	if (value.ptr == ptr)
 		return *this;
 	ptr = value.ptr;
-	return *this;
+	return *dynamic_cast<IteratorType*>(this);;
 }
 
-template<class ValueType, bool Reverse>
-ValueType & Iterator<ValueType, Reverse>::operator[](size_t i) 
+template<class IteratorType, class ValueType>
+ValueType & BaseIterator<IteratorType, ValueType>::operator[](size_t i)
 {
-	int index = (int) i;
-	return *(ptr + ((Reverse) ? -index : index));
+	return ptr[index];
+	//int index = (int) i;
+	//return ptr[(Reverse) ? -index : index];
 }
 
-template<class ValueType, bool Reverse>
- Iterator<ValueType, Reverse>::operator-(const Iterator & rhs){
+template<class IteratorType, class ValueType>
+ptrdiff_t BaseIterator<IteratorType, ValueType>::operator-(const IteratorType & rhs){
 	return ptr - rhs.ptr;
 }
 
-template<class ValueType, bool Reverse>
-ValueType & Iterator<ValueType, Reverse>::operator*()
+template<class IteratorType, class ValueType>
+ValueType & BaseIterator<IteratorType, ValueType>::operator*()
 {
 	return *ptr;
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> Iterator<ValueType, Reverse>::operator++()
+template<class IteratorType, class ValueType>
+IteratorType & BaseIterator<IteratorType, ValueType>::operator++()
 {
-	if (Reverse)
-		--ptr;
-	else
+	//if (Reverse)
+	//	--ptr;
+	//else
 		++ptr;
-	return *this;
+	return *dynamic_cast<IteratorType*>(this);
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> Iterator<ValueType, Reverse>::operator++(int)
+template<class IteratorType, class ValueType>
+IteratorType BaseIterator<IteratorType, ValueType>::operator++(int)
 {
-	Iterator temp(ptr);
-	if (Reverse)
-		--ptr;
-	else
+	IteratorType temp(ptr);
+	//if (Reverse)
+	//	--ptr;
+	//else
 		++ptr;
 	return temp;
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> Iterator<ValueType, Reverse>::operator--()
+template<class IteratorType, class ValueType>
+IteratorType BaseIterator<IteratorType, ValueType>::operator--()
 {
-	if (Reverse)
-		++ptr;
-	else
+	//if (Reverse)
+	//	++ptr;
+	//else
 		--ptr;
-	return *this;
+	return *dynamic_cast<IteratorType*>(this);
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> Iterator<ValueType, Reverse>::operator+(int i)
+template<class IteratorType, class ValueType>
+IteratorType BaseIterator<IteratorType, ValueType>::operator+(int i)
 {
-	return Iterator((Reverse) ? ptr - i : ptr + i);
+	//return BaseIterator((Reverse) ? ptr - i : ptr + i);
+	return IteratorType(ptr + i);
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> Iterator<ValueType, Reverse>::operator-(int i)
+template<class IteratorType, class ValueType>
+IteratorType BaseIterator<IteratorType, ValueType>::operator-(int i)
 {
-	return Iterator((Reverse) ? ptr + i : ptr - i);
+	return IteratorType(ptr - i);
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> Iterator<ValueType, Reverse>::operator+=(int i)
+template<class IteratorType, class ValueType>
+IteratorType BaseIterator<IteratorType, ValueType>::operator+=(int i)
 {
-	ptr += (Reverse) ? -i : i;
-	return *dynamic_cast<Iterator*>(this);
+	//ptr += (Reverse) ? -i : i;
+	ptr += i;
+	return *dynamic_cast<IteratorType*>(this);
 }
 
-template<class ValueType, bool Reverse>
-Iterator<ValueType, Reverse> Iterator<ValueType, Reverse>::operator-=(int i)
+template<class IteratorType, class ValueType>
+IteratorType BaseIterator<IteratorType, ValueType>::operator-=(int i)
 {
 	ptr -= (Reverse) ? -i : i;
-	return *dynamic_cast<Iterator*>(this);
+	return *dynamic_cast<IteratorType*>(this);
 }
 
-template<class ValueType, bool Reverse>
-bool Iterator<ValueType, Reverse>::operator!=(const Iterator & rhs)
+template<class IteratorType, class ValueType>
+bool BaseIterator<IteratorType, ValueType>::operator!=(const IteratorType & rhs)
 {
 	return (ptr != rhs.ptr);
 }
 
-template<class ValueType, bool Reverse>
-bool Iterator<ValueType, Reverse>::operator==(const Iterator & rhs)
+template<class IteratorType, class ValueType>
+bool BaseIterator<IteratorType, ValueType>::operator==(const IteratorType & rhs)
 {
 	return (ptr == rhs.ptr);
 }
 
-template<class ValueType, bool Reverse>
-bool Iterator<ValueType, Reverse>::operator<(const Iterator & rhs)
+template<class IteratorType, class ValueType>
+bool BaseIterator<IteratorType, ValueType>::operator<(const IteratorType & rhs)
 {
-	if (Reverse)
-		return (ptr > rhs.ptr);
+	//if (Reverse)
+	//	return (ptr > rhs.ptr);
 	return (ptr < rhs.ptr);
 }
 
-template<class ValueType, bool Reverse>
-bool operator==(const Iterator<ValueType, Reverse> & lhs, const Iterator<ValueType, Reverse> & rhs)
+template<class IteratorType, class ValueType>
+bool operator==(const BaseIterator<IteratorType, ValueType> & lhs, const BaseIterator<IteratorType, ValueType> & rhs)
 {
 	return (lhs.ptr == lhs.ptr);
 }

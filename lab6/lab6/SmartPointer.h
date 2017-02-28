@@ -5,37 +5,40 @@
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #endif
 
+template<class T>
+class WeakPointer;
+
 class Counter
 {
 private:
-	int count;
+	int count = 0;
+	int weakCount = 0;
 public:
-	void addRef() { 
-		++count; 
-		std::cout << "Added: " << count << std::endl;
-	}
-	int removeRef() { 
-		std::cout << "Remove: " << (count - 1) << std::endl;
-		return --count;
-	}
+	void addRef() { ++count; }
+	int removeRef() { return --count;}
+	int getCount() const { return count; }
+
+	void addWeakRef() { ++weakCount; }
+	int removeWeakRef() { return --weakCount; }
+	int getWeakCount() const { return weakCount; }
 };
 
 template<class T>
 class SharedPointer
 {
-private:
+public:
 	T* ptr;
 	Counter* counter;
-public:
 
+//public:
 	SharedPointer(T* newPtr = nullptr);
 	SharedPointer(const SharedPointer & rhs);
-	SharedPointer(const SharedPointer && rhs);
-	//SharedPointer(WeakPointer weakPtr);
+	SharedPointer(SharedPointer && rhs);
+	SharedPointer(WeakPointer<T> & weakPtr);
 	~SharedPointer();
 
 	SharedPointer& operator=(const SharedPointer& rhs);
-	SharedPointer& operator=(const SharedPointer&& rhs);
+	SharedPointer& operator=(SharedPointer&& rhs);
 
 	bool operator==(const SharedPointer & rhs);
 	bool operator<(const SharedPointer & rhs);
@@ -45,9 +48,29 @@ public:
 
 	T& operator*();
 	T* operator->();
-	bool operator();
+	operator bool() const;
 
 	void reset(T* newPtr = nullptr);
 	T* get();
-	void unique(); //??
+	bool unique();
+};
+
+template<class T>
+class WeakPointer
+{
+public:
+	T* ptr;
+	Counter* counter;
+
+//public:
+	WeakPointer();
+	WeakPointer(const SharedPointer<T> & rhs);
+	WeakPointer(const WeakPointer & rhs);
+	~WeakPointer();
+
+	WeakPointer& operator=(const SharedPointer<T>& rhs);
+	WeakPointer& operator=(const WeakPointer& rhs);
+
+	bool expired();
+	SharedPointer<T> lock();
 };

@@ -8,8 +8,7 @@
 template<class T>
 class WeakPointer;
 
-class Counter
-{
+class Counter {
 private:
 	int count = 0;
 	int weakCount = 0;
@@ -24,13 +23,14 @@ public:
 };
 
 template<class T>
-class SharedPointer
-{
-public:
+class SharedPointer {
+	friend WeakPointer<T>;
+
+private:
 	T* ptr;
 	Counter* counter;
 
-//public:
+public:
 	SharedPointer(T* newPtr = nullptr);
 	SharedPointer(const SharedPointer & rhs);
 	SharedPointer(SharedPointer && rhs);
@@ -53,16 +53,18 @@ public:
 	void reset(T* newPtr = nullptr);
 	T* get();
 	bool unique();
+	void clear(SharedPointer & pointer);
 };
 
 template<class T>
-class WeakPointer
-{
-public:
+class WeakPointer {
+	friend SharedPointer<T>;
+
+private:
 	T* ptr;
 	Counter* counter;
 
-//public:
+public:
 	WeakPointer();
 	WeakPointer(const SharedPointer<T> & rhs);
 	WeakPointer(const WeakPointer & rhs);

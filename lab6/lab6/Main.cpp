@@ -35,17 +35,23 @@ void TestG() {
 
 	SharedPointer<C> sp11;
 	assert(!sp11);
+	assert(sp11.Invariant());
 	SharedPointer<C> p15(nullptr);
 	assert(!p15);
+	assert(p15.Invariant());
 	SharedPointer<C> sp12(new C(12));
 	assert(sp12);
+	assert(sp12.Invariant());
 	SharedPointer<C> sp13(sp11);
 	assert(!sp13);
+	assert(sp13.Invariant());
 
 	assert(sp12.unique());
+	assert(sp12.Invariant());
 	SharedPointer<C> sp14(sp12);
 	assert(sp14);
 	assert(!sp12.unique());
+	assert(sp14.Invariant());
 
 
 	//-	Destruktor	G
@@ -54,9 +60,11 @@ void TestG() {
 	//	o	En SharedPointer	G
 	sp14 = sp12;
 	assert(sp14);
+	assert(sp14.Invariant());
 
 	sp14 = sp14;
 	assert(sp14);
+	assert(sp14.Invariant());
 
 	//-	Jämförelse med (== och <)
 	SharedPointer<C> sp31(new C(31));
@@ -67,6 +75,9 @@ void TestG() {
 	assert(sp14 == sp12);
 	assert(!(sp14 == sp31));
 	assert((sp14 < sp31) || (sp31 < sp14));
+	assert(sp11.Invariant());
+	assert(sp12.Invariant());
+	assert(sp14.Invariant());
 
 	//get, * och ->
 
@@ -75,14 +86,18 @@ void TestG() {
 	assert((sp41->value) == (sp41.get()->value));
 	assert((sp41->value) != (sp42.get()->value));
 	assert(&(*sp41) == (sp41.get()));
+	assert(sp41.Invariant());
+	assert(sp42.Invariant());
 
 	//move
 	SharedPointer<C> sp51(std::move(sp41));
 	assert(sp51->value == 41);
 	assert(!sp41);
+	assert(sp41.Invariant());
 
 	sp51.reset();
 	assert(!sp51);
+	assert(sp51.Invariant());
 }
 
 
@@ -99,8 +114,10 @@ void TestVG() {
 	SharedPointer<C> sp12(new C(12));
 	WeakPointer<C> wp13(wp11);
 	assert(wp13.expired());
+	assert(wp13.Invariant());
 	WeakPointer<C> wp14(sp12);
 	assert(!wp14.expired());
+	assert(wp14.Invariant());
 
 	SharedPointer<C> sp17(wp14);
 	assert(sp17);
@@ -113,16 +130,20 @@ void TestVG() {
 	WeakPointer<C> wp15;
 	wp14 = wp11;
 	assert(wp14.expired());
+	assert(wp14.Invariant());
 
 	SharedPointer<C> sp33(new C(33));
 	wp14 = sp33;
 	assert(!wp14.expired());
 	wp14 = wp14;
 	assert(!wp14.expired());
+	assert(wp14.Invariant());
+	assert(sp33.Invariant());
 
 	sp33.reset();
 	assert(!sp33);
 	assert(wp14.expired());
+	assert(wp14.Invariant());
 
 	//Shared(weak)
 	try {
@@ -136,11 +157,13 @@ void TestVG() {
 	//	o	lock()		VG
 	auto sp51 = wp11.lock();					//Error here
 	assert(!sp51);
+	assert(sp51.Invariant());
 
 	SharedPointer<C>  sp55(new C(55));
 	wp14 = sp55;
 	sp51 = wp14.lock();
 	assert(sp51);
+	assert(sp51.Invariant());
 	////	o	expired()		VG	Redan testat
 
 	//move
@@ -151,6 +174,8 @@ void TestVG() {
 	sp51 = std::move(sp61);
 	sp51 = std::move(sp51);
 	assert(sp51->value == 55);
+	assert(sp51
+		.Invariant());
 }
 #endif VG
 

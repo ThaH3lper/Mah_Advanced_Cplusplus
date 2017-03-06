@@ -6,16 +6,29 @@ template<class T>
 SharedPointer<T>::SharedPointer(T * newPtr)
 {
 	ptr = newPtr;
-	counter = new Counter();
-	counter->addRef();
+	if (newPtr)
+	{
+		counter = new Counter();
+		counter->addRef();
+	}
+	else
+		counter = nullptr;
 }
 
 template<class T>
 SharedPointer<T>::SharedPointer(const SharedPointer<T> & rhs)
 {
 	ptr = rhs.ptr;
-	counter = rhs.counter;
-	counter->addRef();
+	if (counter)
+		clear(*this);
+	if (rhs.counter)
+	{
+		counter = rhs.counter;
+		counter->addRef();
+	}
+	else
+		counter = nullptr;
+
 }
 
 template<class T>
@@ -26,12 +39,9 @@ SharedPointer<T>::SharedPointer(SharedPointer<T> && rhs)
 
 	ptr = nullptr;
 	counter = nullptr;
-	counter = new Counter();
-	counter->addRef();
 
 	std::swap(ptr, rhs.ptr);
 	std::swap(counter, rhs.counter);
-
 }
 
 template<class T>
@@ -39,6 +49,7 @@ SharedPointer<T>::SharedPointer(WeakPointer<T> & weakPtr)
 {
 	if (weakPtr.counter == nullptr)
 		throw("std::bad_weak_ptr");
+
 	ptr = weakPtr.ptr;
 	counter = weakPtr.counter;
 	counter->addRef();
@@ -61,8 +72,13 @@ SharedPointer<T> & SharedPointer<T>::operator=(const SharedPointer & rhs)
 	clear(*this);
 
 	ptr = rhs.ptr;
-	counter = rhs.counter;
-	counter->addRef();
+	if (rhs.counter)
+	{
+		counter = rhs.counter;
+		counter->addRef();
+	}
+	else
+		counter = nullptr;
 	return *this;
 }
 
@@ -105,6 +121,13 @@ bool SharedPointer<T>::operator<(const T *& rhs)
 }
 
 template<class T>
+bool SharedPointer<T>::Invariant()
+{
+	return ((counter == nullptr) && (ptr == nullptr))
+		|| counter != nullptr && ptr != nullptr;
+}
+
+template<class T>
 T & SharedPointer<T>::operator*()
 {
 	return *ptr;
@@ -128,8 +151,11 @@ void SharedPointer<T>::reset(T * newPtr = nullptr)
 	clear(*this);
 	
 	ptr = newPtr;
-	counter = new Counter();
-	counter->addRef();
+	if (ptr)
+	{
+		counter = new Counter();
+		counter->addRef();
+	}
 }
 
 template<class T>
@@ -141,20 +167,24 @@ T * SharedPointer<T>::get()
 template<class T>
 bool SharedPointer<T>::unique()
 {
+	if (!counter)
+		return false;
 	return (counter->getCount() == 1);
 }
 
 template<class T>
 void SharedPointer<T>::clear(SharedPointer & pointer)
 {
+	if (!pointer.counter)
+		return;
 	if (pointer.counter->removeRef() == 0)
 	{
 		delete pointer.ptr;
 		if (pointer.counter->getWeakCount() == 0)
 		{
 			delete pointer.counter;
-			pointer.counter = nullptr;
 		}
+		pointer.counter = nullptr;
 	}
 }
 
@@ -166,25 +196,32 @@ template<class T>
 WeakPointer<T>::WeakPointer()
 {
 	ptr = nullptr;
-	counter = new Counter();
-	counter->addWeakRef();
+	counter = nullptr;
 }
 
 template<class T>
 WeakPointer<T>::WeakPointer(const SharedPointer<T> & rhs)
 {
 	ptr = rhs.ptr;
-	counter = rhs.counter;
-	counter->addWeakRef();
+	if (rhs.counter) {
+		counter = rhs.counter;
+		counter->addWeakRef();
+	}
+	else
+		counter = nullptr;
 }
 
 template<class T>
 WeakPointer<T>::WeakPointer(const WeakPointer & rhs)
 {
 	ptr = rhs.ptr;
-	counter = rhs.counter;
-	if(counter != nullptr)
+	if (rhs.counter)
+	{
+		counter = rhs.counter;
 		counter->addWeakRef();
+	}
+	else
+		counter = nullptr;
 }
 
 template<class T>
@@ -215,9 +252,13 @@ WeakPointer<T> & WeakPointer<T>::operator=(const SharedPointer<T> & rhs)
 	}
 
 	ptr = rhs.ptr;
-	counter = rhs.counter;
-	if (rhs.counter != nullptr)
+	if (rhs.counter)
+	{
+		counter = rhs.counter;
 		counter->addWeakRef();
+	}
+	else
+		counter = nullptr;
 
 	return *this;
 }
@@ -235,11 +276,22 @@ WeakPointer<T> & WeakPointer<T>::operator=(const WeakPointer & rhs)
 	}
 
 	ptr = rhs.ptr;
-	counter = rhs.counter;
-	if(rhs.counter != nullptr)
+	if (rhs.counter)
+	{
+		counter = rhs.counter;
 		counter->addWeakRef();
+	}
+	else
+		counter = nullptr;
 
 	return *this;
+}
+
+template<class T>
+bool WeakPointer<T>::Invariant()
+{
+	return ((counter == nullptr) && (ptr == nullptr))
+		|| counter != nullptr;
 }
 
 template<class T>

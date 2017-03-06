@@ -1,10 +1,6 @@
 #pragma once
 #include <iostream>
 
-#ifdef _DEBUG
-#define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-#endif
-
 template<class T>
 class WeakPointer;
 
@@ -46,6 +42,8 @@ public:
 	bool operator==(const T* & rhs);
 	bool operator<(const T* & rhs);
 
+	bool Invariant();
+
 	T& operator*();
 	T* operator->();
 	operator bool() const;
@@ -72,6 +70,8 @@ public:
 
 	WeakPointer& operator=(const SharedPointer<T>& rhs);
 	WeakPointer& operator=(const WeakPointer& rhs);
+
+	bool Invariant();
 
 	bool expired();
 	SharedPointer<T> lock();

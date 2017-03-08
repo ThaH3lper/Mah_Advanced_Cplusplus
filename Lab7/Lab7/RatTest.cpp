@@ -42,20 +42,20 @@ bool TestCompatibility() {
 
 void TestFörGodkänt() {
 
-    /*Rational<short> rs0, rs1(1), rs2(2, 1), rs3(3);
+    Rational<short> rs0, rs1(1), rs2(2, 1), rs3(3);
     Rational<int> ri0;
     Rational<long long> rll0, rll1(1), rll2(2, 1), rll3(3);
 
     //Konstrueras från ”Tal” dvs. Rtal rtal(tal);
     RLL   rllx(1);
     RLL   rlly(rs0);
-
+	
     //Jämföras med == dvs. if (rtal == tal) …
     assert(rs1 == rs1);
     assert(rs2 == 2);
     assert(rs1 == rll1);
-    assert(rs1 == Rational<short>(rs1.nom, rs1.denom));
-    assert(rs1 == Rational<short>(-rs1.nom, -rs1.denom));
+    assert(rs1 == Rational<short>(rs1.P, rs1.Q));
+    assert(rs1 == Rational<short>(-rs1.P, -rs1.Q));
 
     //Tilldelas (=) från ”Tal” dvs. rtal=tal;
     rs3 = Rint(13, 3);
@@ -87,7 +87,7 @@ void TestFörGodkänt() {
     // Overloading av << och >> (ut och in matning)
     std::cout << "Utmatning>" << rs3 << "< skriv in texten mellan > och < + retur\n";
     std::cin >> rs2;
-    assert(rs3 == rs2);*/
+    assert(rs3 == rs2);
 }
 
 #ifdef VG
@@ -107,13 +107,6 @@ void TestFörVälGodkänt() {
 int main()
 {
 	TestFörGodkänt();
-	Rational<int> test1(20, 40);
-	Rational<int> test2(3, 2);
-	Rational<short> p(test1);
-
-
-	if(test1 < test2)
-		std::cout << test1 << " " << test2 << " " << p << std::endl;
 
 	std::cin.get();
 	return 0;

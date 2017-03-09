@@ -8,10 +8,17 @@ template<typename Ta> bool operator==(const Rational<Ta>& lhs, const Rational<Ta
 { return (lhs.P == rhs.P && lhs.Q == rhs.Q); }
 
 template<typename Ta, typename Tb> bool operator==(const Rational<Ta>& lhs, const Rational<Tb>& rhs) 
-{ return (lhs.P / lhs.Q == rhs.P / rhs.Q);}
+{ return (lhs.P / (float)lhs.Q == rhs.P / (float)rhs.Q);}
 
 template<typename Ta, typename Tb> bool operator==(const Rational<Ta>& lhs, const Tb& rhs) 
-{ return (lhs.P / lhs.Q == rhs); }
+{ return (lhs.P / (float)lhs.Q == (float)rhs); }
 
 template<typename Ta, typename Tb> bool operator<(const Rational<Ta>& lhs, const Rational<Tb>& rhs) 
-{ return (lhs.P / lhs.Q < rhs.P / rhs.Q); }
+{ return (lhs.P / (float)lhs.Q < rhs.P / (float)rhs.Q); }
+
+
+
+template<typename Ta, typename Tb> bool operator==(const Ta& lhs, const Rational<Tb>& rhs)
+{ 
+	return (rhs.P / (float)rhs.Q == (float)lhs);
+}

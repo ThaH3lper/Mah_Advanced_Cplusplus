@@ -6,6 +6,7 @@
 template<typename Tint>
 class Rational {
 public:
+	typedef Tint value;
 	Tint P, Q;
 	Rational() : P(0), Q(1) {};
 	Rational(Tint P) :P(P), Q(1) {}
@@ -55,21 +56,38 @@ auto operator+=(const Rational<Tint>& lhs, const Tx& rhs) {
 	return Rational<Tint>(lhs.P + rhs * lhs.Q, lhs.Q);
 }
 
-template<typename Tint, typename Tx>
-Rational<Tint> operator+(Rational<Tint>& lhs, const Rational<Tx>& rhs) {
-	long long p = lhs.P * rhs.Q + rhs.P * lhs.Q;
-	long long q = lhs.Q * rhs.Q;
+template<typename Tint, typename Tx> //Implement Selection
+auto operator+(Rational<Tint>& lhs, const Rational<Tx>& rhs) {
+	long long p = lhs.P * (long long)rhs.Q + rhs.P * (long long)lhs.Q;
+	long long q = lhs.Q * (long long)rhs.Q;
 
-	return Rational<Tint>(p, q);
+	Reduce(p, q);
+	return Rational<select<Tint, Tx>::value>(p, q);
 }
 
 template<typename Tint, typename Tx>
-Rational<Tint> operator+(Rational<Tint>& lhs, const Tx& rhs) {
-	long long p = lhs.P + rhs * lhs.Q;
+auto operator+(Rational<Tint>& lhs, const Tx& rhs) {
+	long long p = lhs.P + rhs * (long long)lhs.Q;
 	long long q = lhs.Q;
 
-	return Rational<Tint>(p, q);
+	Reduce(p, q);
+	return Rational<select<Tint, Tx>::value>(p, q);
 }
 
+template<typename Tint, typename Tx>
+auto operator+(const Tint& lhs, const Rational<Tx>& rhs) {
+	long long p = rhs.P + lhs * (long long)rhs.Q;
+	long long q = rhs.Q;
 
-//*CODE
+	Reduce(p, q);
+	return Rational<select<Tint, Tx>::value>(p, q);
+}
+
+template<class Ta, class Tb> struct select { typedef Ta value;};
+
+template<> struct select<short, int> { typedef int value; };
+template<> struct select<int, short> { typedef int value; };
+template<> struct select<short, long long> { typedef long long value; };
+template<> struct select<long long, short> { typedef long long value; };
+template<> struct select<long long, int> { typedef long long value; };
+template<> struct select<int, long long> { typedef long long value; };

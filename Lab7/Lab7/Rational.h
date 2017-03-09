@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <string>
 #include "GCD.h"
 
 template<typename Tint>
@@ -20,12 +21,11 @@ public:
 		return cout << R.P << "/" << R.Q; 
 	}
 
-	friend std::istream& operator>> (std::istream & cin, Rational<Tint> R) {
-
-		
-		cin >> R.P >> R.Q;
-		//std::cout << "TEST" << std::endl;
-		//R.Q = 3;
+	friend std::istream& operator>> (std::istream & cin, Rational<Tint> & R) {
+		int a, b;
+		scanf_s("%i/%i", &a, &b);
+		R.P = a;
+		R.Q = b;
 		return cin;
 	}
 

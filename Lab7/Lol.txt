@@ -1,0 +1,25 @@
+	Rational<Tint> & operator=(Tint value) {
+		P = value;
+		Q = 1;
+		return *this;
+	}
+
+	template<typename Tb>
+	Rational<Tint> & operator=(Tint value) {
+		P = value;
+		Q = 1;
+		return *this;
+	}
+
+	Rational<Tint> & operator=(const Rational<Tint> & lhs) {
+		P = lhs.P;
+		Q = lhs.Q;
+		return *this;
+	}
+
+	template<typename Tb>
+	Rational<Tint> & operator=(const Rational<Tb> & lhs) {
+		P = lhs.P;
+		Q = lhs.Q;
+		return *this;
+	}
